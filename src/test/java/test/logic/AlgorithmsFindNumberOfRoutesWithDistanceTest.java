@@ -9,6 +9,7 @@ import org.hamcrest.Matchers;
 
 import org.junit.Test;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 
 import test.domain.EndEdge;
@@ -29,9 +30,10 @@ public class AlgorithmsFindNumberOfRoutesWithDistanceTest {
 
         Graph graph = new Graph(graphData);
 
-        int result = Algorithms.findNumberOfRoutesWithDistance(graph, 2, 2, 30);
+        Optional<Integer> numOfRoutes = Algorithms.findNumberOfRoutesWithDistance(graph, 2, 2, 30);
 
-        MatcherAssert.assertThat("number of ", result, Matchers.is(7));
+        MatcherAssert.assertThat("result is present", numOfRoutes.isPresent(), Matchers.is(true));
+        MatcherAssert.assertThat("number of routes", numOfRoutes.get(), Matchers.is(7));
 
     }
 
@@ -44,9 +46,10 @@ public class AlgorithmsFindNumberOfRoutesWithDistanceTest {
 
         Graph graph = new Graph(graphData);
 
-        int result = Algorithms.findNumberOfRoutesWithDistance(graph, 1, 2, 4);
+        Optional<Integer> numOfRoutes = Algorithms.findNumberOfRoutesWithDistance(graph, 1, 2, 4);
 
-        MatcherAssert.assertThat("number of ", result, Matchers.is(2));
+        MatcherAssert.assertThat("result is present", numOfRoutes.isPresent(), Matchers.is(true));
+        MatcherAssert.assertThat("number of routes", numOfRoutes.get(), Matchers.is(2));
 
     }
 
@@ -59,9 +62,24 @@ public class AlgorithmsFindNumberOfRoutesWithDistanceTest {
 
         Graph graph = new Graph(graphData);
 
-        int result = Algorithms.findNumberOfRoutesWithDistance(graph, 0, 1, 4);
+        Optional<Integer> numOfRoutes = Algorithms.findNumberOfRoutesWithDistance(graph, 0, 1, 4);
 
-        MatcherAssert.assertThat("number of ", result, Matchers.is(2));
+        MatcherAssert.assertThat("result is present", numOfRoutes.isPresent(), Matchers.is(true));
+        MatcherAssert.assertThat("number of routes", numOfRoutes.get(), Matchers.is(2));
+    }
 
+    @Test
+    public void testNoRoute() throws Exception {
+        Map<Integer, List<EndEdge>> graphData = new HashMap<>();
+
+        graphData.put(0, Lists.newArrayList(new EndEdge(1, 1)));
+        graphData.put(1, Lists.newArrayList(new EndEdge(0, 1)));
+        graphData.put(2, Lists.<EndEdge>newArrayList());
+
+        Graph graph = new Graph(graphData);
+
+        Optional<Integer> numOfRoutes = Algorithms.findNumberOfRoutesWithDistance(graph, 0, 2, 4);
+
+        MatcherAssert.assertThat("result is absent", numOfRoutes.isPresent(), Matchers.is(false));
     }
 }

@@ -4,10 +4,26 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import com.google.common.base.Optional;
+
 import test.domain.EndEdge;
 import test.domain.Graph;
 
 public class Algorithms {
+
+    /**
+     * @param   graph
+     * @param   route
+     *
+     * @return
+     */
+    public static Optional<Integer> calculateDistanceForARoute(final Graph graph, final List<Integer> route) {
+        if (route == null || route.isEmpty()) {
+            return Optional.absent();
+        }
+
+        return Optional.absent();
+    }
 
     private static class NodeInQueue {
         private int vertex;
@@ -44,8 +60,10 @@ public class Algorithms {
      *
      * <p>The worst case algorithm complexity is N^MAX_DISTANCE, where N - number of graph vertexes, the graph is
      * complete and the weight of each edge is 1.
+     *
+     * @return  number of routes, null in case
      */
-    public static int findNumberOfRoutesWithDistance(final Graph graph, final int start, final int finish,
+    public static Optional<Integer> findNumberOfRoutesWithDistance(final Graph graph, final int start, final int finish,
             final int maxDistance) {
 
         final Queue<NodeInQueue> queue = new LinkedList<NodeInQueue>();
@@ -75,7 +93,7 @@ public class Algorithms {
             result += dp[start][distance];
         }
 
-        return result;
+        return Optional.fromNullable(result != 0 ? result : null);
     }
 
 }
