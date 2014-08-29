@@ -14,12 +14,12 @@ import com.google.common.collect.Lists;
 import test.domain.EndEdge;
 import test.domain.Graph;
 
-public class AlgorithmsTest {
+public class AlgorithmsFindNumberOfRoutesWithDistanceTest {
 
     @Test
-    public void testFindNumberOfRoutesWithDistanceNokia() throws Exception {
+    public void testFromNokia() throws Exception {
 
-        Map<Integer, List<EndEdge>> graphData = new HashMap<Integer, List<EndEdge>>();
+        Map<Integer, List<EndEdge>> graphData = new HashMap<>();
 
         graphData.put(0, Lists.newArrayList(new EndEdge(1, 5), new EndEdge(3, 5), new EndEdge(4, 7)));
         graphData.put(1, Lists.newArrayList(new EndEdge(2, 4)));
@@ -37,7 +37,7 @@ public class AlgorithmsTest {
 
     @Test
     public void testThreeVertices() throws Exception {
-        Map<Integer, List<EndEdge>> graphData = new HashMap<Integer, List<EndEdge>>();
+        Map<Integer, List<EndEdge>> graphData = new HashMap<>();
 
         graphData.put(0, Lists.newArrayList(new EndEdge(2, 1)));
         graphData.put(1, Lists.newArrayList(new EndEdge(0, 2), new EndEdge(2, 3)));
@@ -45,6 +45,21 @@ public class AlgorithmsTest {
         Graph graph = new Graph(graphData);
 
         int result = Algorithms.findNumberOfRoutesWithDistance(graph, 1, 2, 4);
+
+        MatcherAssert.assertThat("number of ", result, Matchers.is(2));
+
+    }
+
+    @Test
+    public void testTwoVertexesWithCycle() throws Exception {
+        Map<Integer, List<EndEdge>> graphData = new HashMap<>();
+
+        graphData.put(0, Lists.newArrayList(new EndEdge(1, 1)));
+        graphData.put(1, Lists.newArrayList(new EndEdge(0, 1)));
+
+        Graph graph = new Graph(graphData);
+
+        int result = Algorithms.findNumberOfRoutesWithDistance(graph, 0, 1, 4);
 
         MatcherAssert.assertThat("number of ", result, Matchers.is(2));
 

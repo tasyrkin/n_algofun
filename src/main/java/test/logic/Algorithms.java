@@ -40,7 +40,10 @@ public class Algorithms {
      * <p>Algorithm starts from FINISH vertex and traverses all paths with breadth-first search until the path weight is
      * less or equal than MAX_DISTANCE.
      *
-     * <p>The result is found by counting dp[START][w], where w < MAX_DISTANCE
+     * <p>The result is found by counting dp[START][w], where w < MAX_DISTANCE.
+     *
+     * <p>The worst case algorithm complexity is N^MAX_DISTANCE, where N - number of graph vertexes, the graph is
+     * complete and the weight of each edge is 1.
      */
     public static int findNumberOfRoutesWithDistance(final Graph graph, final int start, final int finish,
             final int maxDistance) {
