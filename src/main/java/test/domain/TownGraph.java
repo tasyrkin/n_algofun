@@ -87,17 +87,30 @@ public class TownGraph {
         return result;
     }
 
-    public int[][] getCostMatrix() {
+    public int[][] getConnectivityMatrix() {
         final Set<Integer> vertexes = getVertexes();
-        int[][] costMatrix = new int[vertexes.size()][vertexes.size()];
+        int[][] connectivityMatrix = new int[vertexes.size()][vertexes.size()];
 
         for (int fromVertex : vertexes) {
             for (TownGraphEdge toTownGraphEdge : getToEdges(fromVertex)) {
-                costMatrix[fromVertex][toTownGraphEdge.getFrom()] = toTownGraphEdge.getDistance();
+                connectivityMatrix[fromVertex][toTownGraphEdge.getTo()] = 1;
             }
         }
 
-        return costMatrix;
+        return connectivityMatrix;
+    }
+
+    public int[][] getAdjacencyMatrix() {
+        final Set<Integer> vertexes = getVertexes();
+        int[][] adjacencyMatrix = new int[vertexes.size()][vertexes.size()];
+
+        for (int fromVertex : vertexes) {
+            for (TownGraphEdge toTownGraphEdge : getToEdges(fromVertex)) {
+                adjacencyMatrix[fromVertex][toTownGraphEdge.getTo()] = toTownGraphEdge.getDistance();
+            }
+        }
+
+        return adjacencyMatrix;
     }
 
     public boolean isInGraph(final int vertex) {

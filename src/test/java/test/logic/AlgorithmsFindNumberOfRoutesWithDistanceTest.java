@@ -17,7 +17,7 @@ import test.domain.TownGraphEdgeBuilder;
 public class AlgorithmsFindNumberOfRoutesWithDistanceTest {
 
     @Test
-    public void testFromNokia() throws Exception {
+    public void testFromNokia() {
 
         //J-
         List<TownGraphEdge> edges = Lists.newArrayList(
@@ -43,7 +43,7 @@ public class AlgorithmsFindNumberOfRoutesWithDistanceTest {
     }
 
     @Test
-    public void testThreeVertices() throws Exception {
+    public void testThreeVertices() {
         //J-
         List<TownGraphEdge> edges = Lists.newArrayList(
                 new TownGraphEdgeBuilder().from(0).to(2).distance(1).build(),
@@ -62,7 +62,7 @@ public class AlgorithmsFindNumberOfRoutesWithDistanceTest {
     }
 
     @Test
-    public void testTwoVertexesWithCycle() throws Exception {
+    public void testTwoVertexesWithCycle() {
         //J-
         List<TownGraphEdge> edges = Lists.newArrayList(
                 new TownGraphEdgeBuilder().from(0).to(1).distance(1).build(),
@@ -79,7 +79,7 @@ public class AlgorithmsFindNumberOfRoutesWithDistanceTest {
     }
 
     @Test
-    public void testNoRoute() throws Exception {
+    public void testNoRoute() {
         //J-
         List<TownGraphEdge> edges = Lists.newArrayList(
                 new TownGraphEdgeBuilder().from(0).to(1).distance(1).build()
