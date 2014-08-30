@@ -6,20 +6,30 @@ import java.util.Queue;
 
 import com.google.common.base.Optional;
 
-import test.domain.EndEdge;
-import test.domain.Graph;
+import test.domain.TownGraph;
+import test.domain.TownGraphEdge;
 
 public class Algorithms {
 
     /**
-     * @param   graph
+     * @param   townGraph
      * @param   route
      *
      * @return
      */
-    public static Optional<Integer> calculateDistanceForARoute(final Graph graph, final List<Integer> route) {
-        if (route == null || route.isEmpty()) {
+    public static Optional<Integer> calculateDistanceForARoute(final TownGraph townGraph, final List<Integer> route) {
+        if (townGraph == null || route == null || route.isEmpty()) {
             return Optional.absent();
+        }
+
+        final int[][] costMatrix = townGraph.getCostMatrix();
+
+        int distance = 0;
+        Integer prevVertex = null;
+        for (Integer vertex : route) {
+            if (prevVertex == null) {
+                prevVertex = vertex;
+            } else { }
         }
 
         return Optional.absent();
@@ -27,19 +37,19 @@ public class Algorithms {
 
     private static class NodeInQueue {
         private int vertex;
-        private int distance;
+        private int totalDistanceToFinal;
 
-        private NodeInQueue(final int vertex, final int distance) {
+        private NodeInQueue(final int vertex, final int totalDistanceToFinal) {
             this.vertex = vertex;
-            this.distance = distance;
+            this.totalDistanceToFinal = totalDistanceToFinal;
         }
 
         public int getVertex() {
             return vertex;
         }
 
-        public int getDistance() {
-            return distance;
+        public int getTotalDistanceToFinal() {
+            return totalDistanceToFinal;
         }
     }
 
@@ -61,30 +71,34 @@ public class Algorithms {
      * <p>The worst case algorithm complexity is N^MAX_DISTANCE, where N - number of graph vertexes, the graph is
      * complete and the weight of each edge is 1.
      *
-     * @return  number of routes, null in case
+     * @return  number of routes, absent in case if no route is found
      */
-    public static Optional<Integer> findNumberOfRoutesWithDistance(final Graph graph, final int start, final int finish,
-            final int maxDistance) {
+    public static Optional<Integer> findNumberOfRoutesWithDistance(final TownGraph townGraph, final int start,
+            final int finish, final int maxDistance) {
 
-        final Queue<NodeInQueue> queue = new LinkedList<NodeInQueue>();
+        int numberOfVertexes = townGraph.getVertexes().size();
+
+        final Queue<NodeInQueue> queue = new LinkedList<>();
 
         queue.add(new NodeInQueue(finish, 0));
 
-        final int[][] dp = new int[graph.getVertexes().size()][maxDistance + 1];
+        final int[][] dp = new int[numberOfVertexes][maxDistance + 1];
 
         while (!queue.isEmpty()) {
             final NodeInQueue node = queue.poll();
-            final List<EndEdge> fromNeighbours = graph.getFromNeighbours(node.getVertex());
+            final List<TownGraphEdge> fromNeighbours = townGraph.getFromEdges(node.getVertex());
 
-            for (EndEdge endEdge : fromNeighbours) {
-                if (endEdge.getCost() + node.getDistance() <= maxDistance) {
-                    NodeInQueue newNode = new NodeInQueue(endEdge.getVertex(), endEdge.getCost() + node.getDistance());
-                    dp[newNode.getVertex()][newNode.getDistance()] +=
-                        dp[node.getVertex()][node.getDistance()] == 0 && node.getVertex() == finish
-                        ? 1 : dp[node.getVertex()][node.getDistance()];
+            //J-
+            for (TownGraphEdge fromEdge : fromNeighbours) {
+                NodeInQueue newNode = new NodeInQueue(fromEdge.getFrom(), node.getTotalDistanceToFinal() + fromEdge.getDistance());
+                if (newNode.getTotalDistanceToFinal() <= maxDistance) {
+                    dp[newNode.getVertex()][newNode.getTotalDistanceToFinal()] +=
+                            dp[node.getVertex()][node.getTotalDistanceToFinal()] == 0
+                                    ? 1 : dp[node.getVertex()][node.getTotalDistanceToFinal()];
                     queue.offer(newNode);
                 }
             }
+            //J+
         }
 
         int result = 0;
@@ -93,7 +107,7 @@ public class Algorithms {
             result += dp[start][distance];
         }
 
-        return Optional.fromNullable(result != 0 ? result : null);
+        return result != 0 ? Optional.of(result) : Optional.<Integer>absent();
     }
 
 }

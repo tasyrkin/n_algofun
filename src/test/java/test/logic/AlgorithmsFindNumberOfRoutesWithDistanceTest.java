@@ -1,8 +1,6 @@
 package test.logic;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -12,25 +10,32 @@ import org.junit.Test;
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 
-import test.domain.EndEdge;
-import test.domain.Graph;
+import test.domain.TownGraph;
+import test.domain.TownGraphEdge;
+import test.domain.TownGraphEdgeBuilder;
 
 public class AlgorithmsFindNumberOfRoutesWithDistanceTest {
 
     @Test
     public void testFromNokia() throws Exception {
 
-        Map<Integer, List<EndEdge>> graphData = new HashMap<>();
+        //J-
+        List<TownGraphEdge> edges = Lists.newArrayList(
+                new TownGraphEdgeBuilder().from(0).to(1).distance(5).build(),
+                new TownGraphEdgeBuilder().from(0).to(3).distance(5).build(),
+                new TownGraphEdgeBuilder().from(0).to(4).distance(7).build(),
+                new TownGraphEdgeBuilder().from(1).to(2).distance(4).build(),
+                new TownGraphEdgeBuilder().from(2).to(3).distance(8).build(),
+                new TownGraphEdgeBuilder().from(2).to(4).distance(2).build(),
+                new TownGraphEdgeBuilder().from(3).to(2).distance(8).build(),
+                new TownGraphEdgeBuilder().from(3).to(4).distance(6).build(),
+                new TownGraphEdgeBuilder().from(4).to(1).distance(3).build()
+        );
+        //J+
 
-        graphData.put(0, Lists.newArrayList(new EndEdge(1, 5), new EndEdge(3, 5), new EndEdge(4, 7)));
-        graphData.put(1, Lists.newArrayList(new EndEdge(2, 4)));
-        graphData.put(2, Lists.newArrayList(new EndEdge(3, 8), new EndEdge(4, 2)));
-        graphData.put(3, Lists.newArrayList(new EndEdge(2, 8), new EndEdge(4, 6)));
-        graphData.put(4, Lists.newArrayList(new EndEdge(1, 3)));
+        TownGraph townGraph = new TownGraph(edges);
 
-        Graph graph = new Graph(graphData);
-
-        Optional<Integer> numOfRoutes = Algorithms.findNumberOfRoutesWithDistance(graph, 2, 2, 30);
+        Optional<Integer> numOfRoutes = Algorithms.findNumberOfRoutesWithDistance(townGraph, 2, 2, 30);
 
         MatcherAssert.assertThat("result is present", numOfRoutes.isPresent(), Matchers.is(true));
         MatcherAssert.assertThat("number of routes", numOfRoutes.get(), Matchers.is(7));
@@ -39,14 +44,17 @@ public class AlgorithmsFindNumberOfRoutesWithDistanceTest {
 
     @Test
     public void testThreeVertices() throws Exception {
-        Map<Integer, List<EndEdge>> graphData = new HashMap<>();
+        //J-
+        List<TownGraphEdge> edges = Lists.newArrayList(
+                new TownGraphEdgeBuilder().from(0).to(2).distance(1).build(),
+                new TownGraphEdgeBuilder().from(1).to(0).distance(2).build(),
+                new TownGraphEdgeBuilder().from(1).to(2).distance(3).build()
+        );
+        //J+
 
-        graphData.put(0, Lists.newArrayList(new EndEdge(2, 1)));
-        graphData.put(1, Lists.newArrayList(new EndEdge(0, 2), new EndEdge(2, 3)));
+        TownGraph townGraph = new TownGraph(edges);
 
-        Graph graph = new Graph(graphData);
-
-        Optional<Integer> numOfRoutes = Algorithms.findNumberOfRoutesWithDistance(graph, 1, 2, 4);
+        Optional<Integer> numOfRoutes = Algorithms.findNumberOfRoutesWithDistance(townGraph, 1, 2, 4);
 
         MatcherAssert.assertThat("result is present", numOfRoutes.isPresent(), Matchers.is(true));
         MatcherAssert.assertThat("number of routes", numOfRoutes.get(), Matchers.is(2));
@@ -55,14 +63,16 @@ public class AlgorithmsFindNumberOfRoutesWithDistanceTest {
 
     @Test
     public void testTwoVertexesWithCycle() throws Exception {
-        Map<Integer, List<EndEdge>> graphData = new HashMap<>();
+        //J-
+        List<TownGraphEdge> edges = Lists.newArrayList(
+                new TownGraphEdgeBuilder().from(0).to(1).distance(1).build(),
+                new TownGraphEdgeBuilder().from(1).to(0).distance(1).build()
+        );
+        //J+
 
-        graphData.put(0, Lists.newArrayList(new EndEdge(1, 1)));
-        graphData.put(1, Lists.newArrayList(new EndEdge(0, 1)));
+        TownGraph townGraph = new TownGraph(edges);
 
-        Graph graph = new Graph(graphData);
-
-        Optional<Integer> numOfRoutes = Algorithms.findNumberOfRoutesWithDistance(graph, 0, 1, 4);
+        Optional<Integer> numOfRoutes = Algorithms.findNumberOfRoutesWithDistance(townGraph, 0, 1, 4);
 
         MatcherAssert.assertThat("result is present", numOfRoutes.isPresent(), Matchers.is(true));
         MatcherAssert.assertThat("number of routes", numOfRoutes.get(), Matchers.is(2));
@@ -70,15 +80,15 @@ public class AlgorithmsFindNumberOfRoutesWithDistanceTest {
 
     @Test
     public void testNoRoute() throws Exception {
-        Map<Integer, List<EndEdge>> graphData = new HashMap<>();
+        //J-
+        List<TownGraphEdge> edges = Lists.newArrayList(
+                new TownGraphEdgeBuilder().from(0).to(1).distance(1).build()
+        );
+        //J+
 
-        graphData.put(0, Lists.newArrayList(new EndEdge(1, 1)));
-        graphData.put(1, Lists.newArrayList(new EndEdge(0, 1)));
-        graphData.put(2, Lists.<EndEdge>newArrayList());
+        TownGraph townGraph = new TownGraph(edges);
 
-        Graph graph = new Graph(graphData);
-
-        Optional<Integer> numOfRoutes = Algorithms.findNumberOfRoutesWithDistance(graph, 0, 2, 4);
+        Optional<Integer> numOfRoutes = Algorithms.findNumberOfRoutesWithDistance(townGraph, 1, 0, 2);
 
         MatcherAssert.assertThat("result is absent", numOfRoutes.isPresent(), Matchers.is(false));
     }
