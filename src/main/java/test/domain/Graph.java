@@ -9,18 +9,21 @@ import java.util.Set;
 
 public class Graph {
 
-    private Map<Integer, List<EndEdge>> graphData = new HashMap<Integer, List<EndEdge>>();
-    private Map<Integer, List<EndEdge>> revertedData;
+    private final Map<Integer, List<EndEdge>> graphData = new HashMap<>();
+    private final Map<Integer, List<EndEdge>> revertedData;
 
     public Graph(final Map<Integer, List<EndEdge>> graphData) {
-        this.graphData = graphData;
+
+        for (Map.Entry<Integer, List<EndEdge>> entry : graphData.entrySet()) {
+            this.graphData.put(entry.getKey(), entry.getValue());
+        }
 
         revertedData = revertGraphData(graphData);
     }
 
     private static Map<Integer, List<EndEdge>> revertGraphData(final Map<Integer, List<EndEdge>> graphData) {
 
-        final Map<Integer, List<EndEdge>> revertedData = new HashMap<Integer, List<EndEdge>>();
+        final Map<Integer, List<EndEdge>> revertedData = new HashMap<>();
 
         for (Map.Entry<Integer, List<EndEdge>> entry : graphData.entrySet()) {
             int from = entry.getKey();
@@ -43,7 +46,7 @@ public class Graph {
         final List<EndEdge> list = graphData.get(from);
 
         if (list == null) {
-            return new ArrayList<EndEdge>();
+            return new ArrayList<>();
         }
 
         return list;
@@ -54,14 +57,14 @@ public class Graph {
         final List<EndEdge> list = revertedData.get(to);
 
         if (list == null) {
-            return new ArrayList<EndEdge>();
+            return new ArrayList<>();
         }
 
         return list;
     }
 
     public Set<Integer> getVertexes() {
-        final Set<Integer> result = new HashSet<Integer>();
+        final Set<Integer> result = new HashSet<>();
 
         for (Map.Entry<Integer, List<EndEdge>> entry : graphData.entrySet()) {
             result.add(entry.getKey());
