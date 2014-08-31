@@ -19,8 +19,10 @@ public class Algorithms {
      * <p>The solution is linear traversal through the adjacency matrix and summing up the met values. In case if the
      * distance is 0, then the route does not exist.
      *
-     * <p>Complexity: O(m+n) where m - number of edges (for building adjacency matrix), n - number of vertexes in the
-     * route.
+     * <p>The time complexity: O(M+K) where M - number of graph edges (for building adjacency matrix), K - number of
+     * vertexes in the route.
+     *
+     * <p>The space complexity: O(N^2) where N - number of graph vertexes.
      */
     public static Optional<Integer> calculateDistanceForRoute(final TownGraph townGraph, final List<Integer> route) {
         if (townGraph == null || route == null || route.isEmpty()) {
@@ -46,6 +48,21 @@ public class Algorithms {
         return optionalOrAbsentIfZero(distance);
     }
 
+    /**
+     * <p>Problem 2: find the number of routes from START vertex to FINISH vertex with a less or equal number of STOPS.
+     *
+     * <p>The solution is based on raising graph's connectivity matrix to the power of STOPS.
+     *
+     * <p>The result is found by summing up the intermediate result of matrix exponentiation for every STOP value:
+     * resultPowK[START][FINISH].
+     *
+     * <p>The time complexity is O(N^3*STOPS), where N - number of graph vertexes.
+     *
+     * <p>The space complexity is O(N^2), where N - number of graph vertexes.
+     *
+     * @return  number of routes
+     */
+
     public static long findNumberOfRoutesWithLessThanAndExactlyStops(final TownGraph townGraph, final int from,
             final int to, final int maxStopsInclusive) {
         Preconditions.checkArgument(maxStopsInclusive >= 0, "Number of stops must be non negative, was [%s]",
@@ -64,6 +81,20 @@ public class Algorithms {
         return numberOfRoutes;
     }
 
+    /**
+     * <p>Problem 3: find the number of routes from START vertex to FINISH vertex with a exactly number of STOPS.
+     *
+     * <p>The solution is based on raising graph's connectivity matrix to the power of STOPS.
+     *
+     * <p>The result is found by taking result[START][FINISH].
+     *
+     * <p>The time complexity is O(N^3*LOG(STOPS)), where N - number of graph vertexes. LOG(STOPS) is achieved by
+     * exponentiating the matrix using efficient binary power algorithm.
+     *
+     * <p>The space complexity is O(N^2), where N - number of graph vertexes.
+     *
+     * @return  number of routes
+     */
     public static long findNumberOfRoutesWithExactlyStops(final TownGraph townGraph, final int from, final int to,
             final int stops) {
 
@@ -164,8 +195,8 @@ public class Algorithms {
      *
      * <p>The result is found by summing up dp[START][w], where w < MAX_DISTANCE.
      *
-     * <p>Complexity: the worst case algorithm complexity is N^MAX_DISTANCE, where N - number of graph vertexes, the
-     * graph is complete and the weight of each edge is 1.
+     * <p>The worst case time complexity is N^MAX_DISTANCE, where N - number of graph vertexes, the graph is complete
+     * and the weight of each edge is 1.
      *
      * @return  number of routes, absent in case if no route is found
      */
