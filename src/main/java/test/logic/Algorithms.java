@@ -21,10 +21,10 @@ public class Algorithms {
      * <p>The solution is linear traversal through the adjacency matrix and summing up the met values. In case if the
      * distance is 0, then the route does not exist.
      *
-     * <p>The time complexity: O(M+K) where M - number of graph edges (for building adjacency matrix), K - number of
+     * <p>The time complexity: O(E+K) where M - number of graph edges (for building adjacency matrix), K - number of
      * vertexes in the route.
      *
-     * <p>The space complexity: O(N^2) where N - number of graph vertexes.
+     * <p>The space complexity: O(V^2) where V - number of graph vertexes.
      */
     public static Optional<Integer> calculateDistanceForRoute(final TownGraph townGraph, final List<Integer> route) {
         if (townGraph == null || route == null || route.isEmpty()) {
@@ -58,9 +58,9 @@ public class Algorithms {
      * <p>The result is found by summing up the intermediate result of matrix exponentiation for every STOP value:
      * resultPowK[START][FINISH].
      *
-     * <p>The time complexity is O(N^3*STOPS), where N - number of graph vertexes.
+     * <p>The time complexity is O(V^3*STOPS), where V - number of graph vertexes.
      *
-     * <p>The space complexity is O(N^2), where N - number of graph vertexes.
+     * <p>The space complexity is O(V^2), where N - number of graph vertexes.
      *
      * @return  number of routes
      */
@@ -90,10 +90,10 @@ public class Algorithms {
      *
      * <p>The result is found by taking result[START][FINISH].
      *
-     * <p>The time complexity is O(N^3*LOG(STOPS)), where N - number of graph vertexes. LOG(STOPS) is achieved by
+     * <p>The time complexity is O(V^3*LOG(STOPS)), where V - number of graph vertexes. LOG(STOPS) is achieved by
      * exponentiating the matrix using efficient binary power algorithm.
      *
-     * <p>The space complexity is O(N^2), where N - number of graph vertexes.
+     * <p>The space complexity is O(V^2), where V - number of graph vertexes.
      *
      * @return  number of routes
      */
@@ -160,6 +160,20 @@ public class Algorithms {
         return result;
     }
 
+    /**
+     * <p>Problem 4: find the shortest distance from START vertex to FINISH vertex with at least one stop.
+     *
+     * <p>The solution is based on Dijkstra's shortest path algorithm, with modification for the case when START ==
+     * FINISH
+     *
+     * <p>The time complexity is O(V^2*E), where V - number of graph vertexes. E - number graph edges. This is naive
+     * implementation of Dijkstra's algorithm, which may be further improved to reach O(E + V*LOG(V)) with Fibonacci
+     * Heap.
+     *
+     * <p>The space complexity is O(V), where V - number of graph vertexes.
+     *
+     * @return  number of routes
+     */
     public static Optional<Long> findShortestDistance(final TownGraph townGraph, final int from, final int to) {
 
         long[] shortestDistance = new long[townGraph.getVertexes().size()];
@@ -251,7 +265,7 @@ public class Algorithms {
      *
      * <p>The result is found by summing up dp[START][w], where w < MAX_DISTANCE.
      *
-     * <p>The worst case time complexity is N^MAX_DISTANCE, where N - number of graph vertexes, the graph is complete
+     * <p>The worst case time complexity is V^MAX_DISTANCE, where V - number of graph vertexes, the graph is complete
      * and the weight of each edge is 1.
      *
      * @return  number of routes, absent in case if no route is found
