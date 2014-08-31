@@ -4,7 +4,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
+import com.google.common.base.Preconditions;
 
 import test.domain.TownGraph;
 import test.domain.TownGraphEdge;
@@ -42,6 +44,91 @@ public class Algorithms {
         }
 
         return optionalOrAbsentIfZero(distance);
+    }
+
+    public static long findNumberOfRoutesWithLessThanAndExactlyStops(final TownGraph townGraph, final int from,
+            final int to, final int maxStopsInclusive) {
+        Preconditions.checkArgument(maxStopsInclusive >= 0, "Number of stops must be non negative, was [%s]",
+            maxStopsInclusive);
+
+        long[][] connectivityMatrix = townGraph.getConnectivityMatrix();
+
+        long[][] result = identityMatrix(connectivityMatrix.length, connectivityMatrix[0].length);
+
+        long numberOfRoutes = 0;
+        for (int i = 0; i < maxStopsInclusive; i++) {
+            result = multiplyMatrices(result, connectivityMatrix);
+            numberOfRoutes += result[from][to];
+        }
+
+        return numberOfRoutes;
+    }
+
+    public static long findNumberOfRoutesWithExactlyStops(final TownGraph townGraph, final int from, final int to,
+            final int stops) {
+
+        Preconditions.checkArgument(stops >= 0, "Number of stops must be non negative, was [%s]", stops);
+
+        int multiplyTimes = stops;
+
+        long[][] connectivityMatrix = townGraph.getConnectivityMatrix();
+
+        long[][] result = identityMatrix(connectivityMatrix.length, connectivityMatrix[0].length);
+
+        while (multiplyTimes > 0) {
+            if (multiplyTimes % 2 == 1) {
+                result = multiplyMatrices(result, connectivityMatrix);
+                multiplyTimes--;
+            } else {
+                connectivityMatrix = multiplyMatrices(connectivityMatrix, connectivityMatrix);
+                multiplyTimes >>= 1;
+            }
+        }
+
+        return result[from][to];
+    }
+
+    @VisibleForTesting
+    static long[][] multiplyMatrices(final long[][] matrixOne, final long[][] matrixTwo) {
+
+        //J-
+        Preconditions.checkArgument(
+                matrixOne[0].length == matrixTwo.length,
+                "Dimensions of the multiplied matrices are wrong, matrixOne [%sx%s], matrixTwo [%sx%s]",
+                matrixOne.length, matrixOne[0].length,
+                matrixTwo.length, matrixTwo[0].length
+        );
+        //J+
+
+        long[][] result = new long[matrixOne.length][matrixTwo[0].length];
+        for (int i = 0; i < matrixOne.length; i++) {
+            for (int j = 0; j < matrixTwo[0].length; j++) {
+                int value = 0;
+                for (int k = 0; k < matrixOne[0].length; k++) {
+                    value += matrixOne[i][k] * matrixTwo[k][j];
+                }
+
+                result[i][j] = value;
+            }
+        }
+
+        return result;
+    }
+
+    private static long[][] identityMatrix(final int rows, final int cols) {
+        long[][] result = new long[rows][cols];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < rows; j++) {
+                result[i][j] = i == j ? 1 : 0;
+            }
+
+        }
+
+        return result;
+    }
+
+    public static Optional<Integer> findShortestPath(final TownGraph townGraph, final int from, final int to) {
+        return null;
     }
 
     private static class NodeInQueue {
@@ -83,7 +170,10 @@ public class Algorithms {
      * @return  number of routes, absent in case if no route is found
      */
     public static Optional<Integer> findNumberOfRoutesWithDistance(final TownGraph townGraph, final int start,
-            final int finish, final int maxDistance) {
+            final int finish, final int maxDistanceExclusive) {
+
+        Preconditions.checkArgument(maxDistanceExclusive >= 0, "Max distance must be non negative, was [%s]",
+            maxDistanceExclusive);
 
         int numberOfVertexes = townGraph.getVertexes().size();
 
@@ -91,7 +181,7 @@ public class Algorithms {
 
         queue.add(new NodeInQueue(finish, 0));
 
-        final int[][] dp = new int[numberOfVertexes][maxDistance + 1];
+        final int[][] dp = new int[numberOfVertexes][maxDistanceExclusive + 1];
 
         while (!queue.isEmpty()) {
             final NodeInQueue node = queue.poll();
@@ -100,7 +190,7 @@ public class Algorithms {
             //J-
             for (TownGraphEdge fromEdge : fromNeighbours) {
                 NodeInQueue newNode = new NodeInQueue(fromEdge.getFrom(), node.getTotalDistanceToFinal() + fromEdge.getDistance());
-                if (newNode.getTotalDistanceToFinal() <= maxDistance) {
+                if (newNode.getTotalDistanceToFinal() <= maxDistanceExclusive) {
                     dp[newNode.getVertex()][newNode.getTotalDistanceToFinal()] +=
                             dp[node.getVertex()][node.getTotalDistanceToFinal()] == 0
                                     ? 1 : dp[node.getVertex()][node.getTotalDistanceToFinal()];
@@ -112,7 +202,7 @@ public class Algorithms {
 
         int result = 0;
 
-        for (int distance = 0; distance < maxDistance; distance++) {
+        for (int distance = 0; distance < maxDistanceExclusive; distance++) {
             result += dp[start][distance];
         }
 

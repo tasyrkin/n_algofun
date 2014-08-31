@@ -13,15 +13,15 @@ import com.google.common.collect.Lists;
 public class TownGraphTest {
 
     private static class Pair {
-        int first;
-        int second;
+        long first;
+        long second;
 
-        public Pair(final int first, final int second) {
+        public Pair(final long first, final long second) {
             this.first = first;
             this.second = second;
         }
 
-        public static Pair of(final int first, final int second) {
+        public static Pair of(final long first, final long second) {
             return new Pair(first, second);
         }
 
@@ -50,8 +50,8 @@ public class TownGraphTest {
 
         @Override
         public int hashCode() {
-            int result = first;
-            result = 31 * result + second;
+            int result = (int) (first ^ (first >>> 32));
+            result = 31 * result + (int) (second ^ (second >>> 32));
             return result;
         }
 
@@ -116,9 +116,7 @@ public class TownGraphTest {
         TownGraph townGraph = new TownGraph(edges);
         //J+
 
-        int[][] connectivityMatrix = townGraph.getConnectivityMatrix();
-
-        System.out.println(getCells(connectivityMatrix, 1));
+        long[][] connectivityMatrix = townGraph.getConnectivityMatrix();
 
         MatcherAssert.assertThat("Matrix present", connectivityMatrix, Matchers.is(Matchers.notNullValue()));
         MatcherAssert.assertThat("Matrix rows", connectivityMatrix.length, Matchers.is(3));
@@ -137,7 +135,7 @@ public class TownGraphTest {
 
     }
 
-    private List<Pair> getCells(final int[][] matrix, final int value) {
+    private List<Pair> getCells(final long[][] matrix, final int value) {
         final List<Pair> result = Lists.newArrayList();
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix[0].length; j++) {

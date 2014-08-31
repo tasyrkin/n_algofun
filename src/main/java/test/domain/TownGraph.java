@@ -87,9 +87,9 @@ public class TownGraph {
         return result;
     }
 
-    public int[][] getConnectivityMatrix() {
+    public long[][] getConnectivityMatrix() {
         final Set<Integer> vertexes = getVertexes();
-        int[][] connectivityMatrix = new int[vertexes.size()][vertexes.size()];
+        long[][] connectivityMatrix = new long[vertexes.size()][vertexes.size()];
 
         for (int fromVertex : vertexes) {
             for (TownGraphEdge toTownGraphEdge : getToEdges(fromVertex)) {
