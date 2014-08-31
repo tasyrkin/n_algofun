@@ -3,6 +3,9 @@ package test.domain;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 
+/**
+ * Represents the edge of town graph. The distance between vertices must be positive.
+ */
 public class TownGraphEdge {
     private int from;
     private int to;

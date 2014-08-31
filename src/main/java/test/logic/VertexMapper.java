@@ -3,6 +3,9 @@ package test.logic;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Maps vertexes represented as characters to integers and vice versa.
+ */
 public class VertexMapper {
     private int nextAvailableId = 0;
     Map<Character, Integer> characterIdIndex = new HashMap<>();

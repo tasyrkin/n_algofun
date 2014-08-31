@@ -2,6 +2,10 @@ package test.logic.algorithms;
 
 import test.domain.INPUT_PROBLEM;
 
+/**
+ * The method factory hides the creation of the AlgorithmExecutor object for appropriate problem. Usually done using
+ * spring configuration so that the class satisfies open closed principle: open for extension and closed modification
+ */
 public class AlgorithmExecutorFactory {
 
     public AlgorithmExecutor getAlgorithmExecutor(final INPUT_PROBLEM inputProblem) {
