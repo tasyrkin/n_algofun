@@ -17,8 +17,10 @@ import com.google.common.collect.Lists;
 import test.domain.TownGraph;
 import test.domain.TownGraphEdgeBuilder;
 
+import test.logic.algorithms.P3FindNumberOfRoutesWithExactlyStopsAlgorithm;
+
 @RunWith(Parameterized.class)
-public class AlgorithmsFindNumberOfRoutesWithExactlyStopsTest {
+public class P3FindNumberOfRoutesWithExactlyStopsAlgorithmTest {
 
     private Parameters parameters;
 
@@ -36,7 +38,7 @@ public class AlgorithmsFindNumberOfRoutesWithExactlyStopsTest {
                     new TownGraphEdgeBuilder().from(3).to(2).distance(8).build(),
                     new TownGraphEdgeBuilder().from(3).to(4).distance(6).build(),
                     new TownGraphEdgeBuilder().from(4).to(1).distance(3).build()
-                )
+                ), 5
         );
 
         final TownGraph threeVertexCompleteGraph = new TownGraph(
@@ -47,7 +49,7 @@ public class AlgorithmsFindNumberOfRoutesWithExactlyStopsTest {
                         new TownGraphEdgeBuilder().from(2).to(0).distance(1).build(),
                         new TownGraphEdgeBuilder().from(1).to(2).distance(1).build(),
                         new TownGraphEdgeBuilder().from(2).to(1).distance(1).build()
-                )
+                ), 3
         );
 
         final Object[][] data = new Object[][] {
@@ -100,7 +102,7 @@ public class AlgorithmsFindNumberOfRoutesWithExactlyStopsTest {
         return Arrays.asList(data);
     }
 
-    public AlgorithmsFindNumberOfRoutesWithExactlyStopsTest(final Parameters parameters) {
+    public P3FindNumberOfRoutesWithExactlyStopsAlgorithmTest(final Parameters parameters) {
         this.parameters = parameters;
     }
 
@@ -139,7 +141,8 @@ public class AlgorithmsFindNumberOfRoutesWithExactlyStopsTest {
 
     @Test
     public void test() {
-        long numberOfRoutes = Algorithms.findNumberOfRoutesWithExactlyStops(parameters.townGraph, parameters.from,
+        long numberOfRoutes =
+            new P3FindNumberOfRoutesWithExactlyStopsAlgorithm().algorithm(parameters.townGraph, parameters.from,
                 parameters.to, parameters.stops);
 
         MatcherAssert.assertThat("Number of routes", numberOfRoutes, Matchers.is(parameters.expectedNumberOfRoutes));

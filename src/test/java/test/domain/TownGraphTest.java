@@ -75,7 +75,7 @@ public class TownGraphTest {
                 new TownGraphEdgeBuilder().from(1).to(2).distance(3).build()
         );
 
-        TownGraph townGraph = new TownGraph(edges);
+        TownGraph townGraph = new TownGraph(edges, 3);
 
         MatcherAssert.assertThat("Vertexes", townGraph.getVertexes(), Matchers.containsInAnyOrder(0, 1, 2));
         MatcherAssert.assertThat("To edges from 0 vertex", townGraph.getToEdges(0),
@@ -96,7 +96,7 @@ public class TownGraphTest {
     public void testGetFromEdges() {
         List<TownGraphEdge> edges = Lists.newArrayList(new TownGraphEdgeBuilder().from(0).to(1).distance(1).build());
 
-        TownGraph townGraph = new TownGraph(edges);
+        TownGraph townGraph = new TownGraph(edges, 3);
 
         MatcherAssert.assertThat("Vertexes", townGraph.getVertexes(), Matchers.containsInAnyOrder(0, 1));
         MatcherAssert.assertThat("From edges to 1 vertex", townGraph.getFromEdges(0), Matchers.is(Matchers.empty()));
@@ -113,7 +113,7 @@ public class TownGraphTest {
                 new TownGraphEdgeBuilder().from(1).to(2).distance(3).build()
         );
 
-        TownGraph townGraph = new TownGraph(edges);
+        TownGraph townGraph = new TownGraph(edges, 3);
         //J+
 
         long[][] connectivityMatrix = townGraph.getConnectivityMatrix();

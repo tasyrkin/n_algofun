@@ -17,8 +17,10 @@ import com.google.common.collect.Lists;
 import test.domain.TownGraph;
 import test.domain.TownGraphEdgeBuilder;
 
+import test.logic.algorithms.P2FindNumberOfRoutesWithLessThanAndExactlyStopsAlgorithm;
+
 @RunWith(Parameterized.class)
-public class AlgorithmsFindNumberOfRoutesWithLessThanAndExactlyStopsTest {
+public class P2FindNumberOfRoutesWithLessThanAndExactlyStopsAlgorithmTest {
 
     private Parameters parameters;
 
@@ -36,7 +38,7 @@ public class AlgorithmsFindNumberOfRoutesWithLessThanAndExactlyStopsTest {
                         new TownGraphEdgeBuilder().from(3).to(2).distance(8).build(),
                         new TownGraphEdgeBuilder().from(3).to(4).distance(6).build(),
                         new TownGraphEdgeBuilder().from(4).to(1).distance(3).build()
-                )
+                ), 5
         );
 
         final TownGraph threeVertexCompleteGraph = new TownGraph(
@@ -47,7 +49,7 @@ public class AlgorithmsFindNumberOfRoutesWithLessThanAndExactlyStopsTest {
                         new TownGraphEdgeBuilder().from(2).to(0).distance(1).build(),
                         new TownGraphEdgeBuilder().from(1).to(2).distance(1).build(),
                         new TownGraphEdgeBuilder().from(2).to(1).distance(1).build()
-                )
+                ), 3
         );
 
 
@@ -80,7 +82,7 @@ public class AlgorithmsFindNumberOfRoutesWithLessThanAndExactlyStopsTest {
         return Arrays.asList(data);
     }
 
-    public AlgorithmsFindNumberOfRoutesWithLessThanAndExactlyStopsTest(final Parameters parameters) {
+    public P2FindNumberOfRoutesWithLessThanAndExactlyStopsAlgorithmTest(final Parameters parameters) {
         this.parameters = parameters;
     }
 
@@ -119,8 +121,10 @@ public class AlgorithmsFindNumberOfRoutesWithLessThanAndExactlyStopsTest {
 
     @Test
     public void test() {
-        long numberOfRoutes = Algorithms.findNumberOfRoutesWithLessThanAndExactlyStops(parameters.townGraph,
-                parameters.from, parameters.to, parameters.maxStops);
+        long numberOfRoutes =
+            new P2FindNumberOfRoutesWithLessThanAndExactlyStopsAlgorithm()
+                .findNumberOfRoutesWithLessThanAndExactlyStops(parameters.townGraph, parameters.from, parameters.to,
+                    parameters.maxStops);
 
         MatcherAssert.assertThat("Number of routes", numberOfRoutes, Matchers.is(parameters.expectedNumberOfRoutes));
     }

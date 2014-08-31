@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.google.common.base.Objects;
+import com.google.common.base.Preconditions;
 
 /**
  * Represents a connected graph of towns with a positive distance between them. Every instance of the class is immutable
@@ -17,13 +18,17 @@ public class TownGraph {
     private final Map<Integer, List<TownGraphEdge>> edgesIndex = new HashMap<>();
     private final Map<Integer, List<TownGraphEdge>> revertedEdgesIndex = new HashMap<>();
 
-    public TownGraph(final List<TownGraphEdge> graphEdges) {
+    public TownGraph(final List<TownGraphEdge> graphEdges, final int numOfVertexes) {
 
         if (graphEdges == null || graphEdges.isEmpty()) {
             throw new IllegalArgumentException("edges are missing");
         }
 
         for (TownGraphEdge edge : graphEdges) {
+            Preconditions.checkArgument(edge.getFrom() >= 0 && edge.getFrom() < numOfVertexes,
+                "Wrong from vertex [%s], expected to be less than [%s]", edge.getFrom(), numOfVertexes);
+            Preconditions.checkArgument(edge.getTo() >= 0 && edge.getTo() < numOfVertexes,
+                "Wrong from vertex [%s], expected to be less than [%s]", edge.getTo(), numOfVertexes);
             indexGraphEdge(edgesIndex, edge);
             reverseIndexGraphEdge(revertedEdgesIndex, edge);
         }

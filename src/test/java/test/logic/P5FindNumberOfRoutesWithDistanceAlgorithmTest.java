@@ -14,7 +14,9 @@ import test.domain.TownGraph;
 import test.domain.TownGraphEdge;
 import test.domain.TownGraphEdgeBuilder;
 
-public class AlgorithmsFindNumberOfRoutesWithDistanceTest {
+import test.logic.algorithms.P5FindNumberOfRoutesWithDistanceAlgorithm;
+
+public class P5FindNumberOfRoutesWithDistanceAlgorithmTest {
 
     @Test
     public void testFromNokia() {
@@ -33,9 +35,9 @@ public class AlgorithmsFindNumberOfRoutesWithDistanceTest {
         );
         //J+
 
-        TownGraph townGraph = new TownGraph(edges);
+        TownGraph townGraph = new TownGraph(edges, 5);
 
-        Optional<Integer> numOfRoutes = Algorithms.findNumberOfRoutesWithDistance(townGraph, 2, 2, 30);
+        Optional<Integer> numOfRoutes = new P5FindNumberOfRoutesWithDistanceAlgorithm().algorithm(townGraph, 2, 2, 30);
 
         MatcherAssert.assertThat("result is present", numOfRoutes.isPresent(), Matchers.is(true));
         MatcherAssert.assertThat("number of routes", numOfRoutes.get(), Matchers.is(7));
@@ -52,9 +54,9 @@ public class AlgorithmsFindNumberOfRoutesWithDistanceTest {
         );
         //J+
 
-        TownGraph townGraph = new TownGraph(edges);
+        TownGraph townGraph = new TownGraph(edges, 3);
 
-        Optional<Integer> numOfRoutes = Algorithms.findNumberOfRoutesWithDistance(townGraph, 1, 2, 4);
+        Optional<Integer> numOfRoutes = new P5FindNumberOfRoutesWithDistanceAlgorithm().algorithm(townGraph, 1, 2, 4);
 
         MatcherAssert.assertThat("result is present", numOfRoutes.isPresent(), Matchers.is(true));
         MatcherAssert.assertThat("number of routes", numOfRoutes.get(), Matchers.is(2));
@@ -70,9 +72,9 @@ public class AlgorithmsFindNumberOfRoutesWithDistanceTest {
         );
         //J+
 
-        TownGraph townGraph = new TownGraph(edges);
+        TownGraph townGraph = new TownGraph(edges, 2);
 
-        Optional<Integer> numOfRoutes = Algorithms.findNumberOfRoutesWithDistance(townGraph, 0, 1, 4);
+        Optional<Integer> numOfRoutes = new P5FindNumberOfRoutesWithDistanceAlgorithm().algorithm(townGraph, 0, 1, 4);
 
         MatcherAssert.assertThat("result is present", numOfRoutes.isPresent(), Matchers.is(true));
         MatcherAssert.assertThat("number of routes", numOfRoutes.get(), Matchers.is(2));
@@ -86,9 +88,9 @@ public class AlgorithmsFindNumberOfRoutesWithDistanceTest {
         );
         //J+
 
-        TownGraph townGraph = new TownGraph(edges);
+        TownGraph townGraph = new TownGraph(edges, 2);
 
-        Optional<Integer> numOfRoutes = Algorithms.findNumberOfRoutesWithDistance(townGraph, 1, 0, 2);
+        Optional<Integer> numOfRoutes = new P5FindNumberOfRoutesWithDistanceAlgorithm().algorithm(townGraph, 1, 0, 2);
 
         MatcherAssert.assertThat("result is absent", numOfRoutes.isPresent(), Matchers.is(false));
     }

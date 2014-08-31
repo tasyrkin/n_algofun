@@ -20,8 +20,10 @@ import test.domain.TownGraph;
 import test.domain.TownGraphEdge;
 import test.domain.TownGraphEdgeBuilder;
 
+import test.logic.algorithms.P1CalculateDistanceForRouteAlgorithm;
+
 @RunWith(Parameterized.class)
-public class AlgorithmsCalculateDistanceForRouteTest {
+public class P1CalculateDistanceForRouteAlgorithmTest {
 
     private TownGraph townGraph;
     private Optional<Integer> expectedDistance;
@@ -43,7 +45,7 @@ public class AlgorithmsCalculateDistanceForRouteTest {
         );
         //J+
 
-        TownGraph nokiaTestTownGraph = new TownGraph(edges);
+        TownGraph nokiaTestTownGraph = new TownGraph(edges, 5);
 
         //J-
         final Object[][] data = new Object[][] {
@@ -58,7 +60,7 @@ public class AlgorithmsCalculateDistanceForRouteTest {
         return Arrays.asList(data);
     }
 
-    public AlgorithmsCalculateDistanceForRouteTest(final TownGraph townGraph, final Optional<Integer> expectedDistance,
+    public P1CalculateDistanceForRouteAlgorithmTest(final TownGraph townGraph, final Optional<Integer> expectedDistance,
             final List<Integer> route) {
         this.townGraph = townGraph;
         this.expectedDistance = expectedDistance;
@@ -67,7 +69,7 @@ public class AlgorithmsCalculateDistanceForRouteTest {
 
     @Test
     public void test() {
-        Optional<Integer> distance = Algorithms.calculateDistanceForRoute(townGraph, route);
+        Optional<Integer> distance = new P1CalculateDistanceForRouteAlgorithm().algorithm(townGraph, route);
         MatcherAssert.assertThat("distance", distance, Matchers.is(expectedDistance));
     }
 }

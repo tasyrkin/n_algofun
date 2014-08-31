@@ -18,8 +18,10 @@ import com.google.common.collect.Lists;
 import test.domain.TownGraph;
 import test.domain.TownGraphEdgeBuilder;
 
+import test.logic.algorithms.P4FindShortestDistanceAlgorithm;
+
 @RunWith(Parameterized.class)
-public class AlgorithmsFindShortestPathTest {
+public class P4FindShortestDistanceAlgorithmTest {
 
     private Parameters parameters;
 
@@ -37,13 +39,13 @@ public class AlgorithmsFindShortestPathTest {
                     new TownGraphEdgeBuilder().from(3).to(2).distance(8).build(),
                     new TownGraphEdgeBuilder().from(3).to(4).distance(6).build(),
                     new TownGraphEdgeBuilder().from(4).to(1).distance(3).build()
-                )
+                ), 5
         );
         final TownGraph twoVertexGraphWithCycle = new TownGraph(
                 Lists.newArrayList(
                     new TownGraphEdgeBuilder().from(0).to(1).distance(Integer.MAX_VALUE).build(),
                     new TownGraphEdgeBuilder().from(1).to(0).distance(Integer.MAX_VALUE).build()
-                )
+                ), 2
         );
 
         final Object[][] data = new Object[][] {
@@ -82,7 +84,7 @@ public class AlgorithmsFindShortestPathTest {
                         .townGraph(twoVertexGraphWithCycle)
                         .from(0)
                         .to(0)
-                        .expectedShortestDistance(Optional.of((long)Integer.MAX_VALUE+(long)Integer.MAX_VALUE))
+                        .expectedShortestDistance(Optional.of((long) Integer.MAX_VALUE + (long) Integer.MAX_VALUE))
                 }
         };
         //J+
@@ -117,14 +119,14 @@ public class AlgorithmsFindShortestPathTest {
         }
     }
 
-    public AlgorithmsFindShortestPathTest(final Parameters parameters) {
+    public P4FindShortestDistanceAlgorithmTest(final Parameters parameters) {
         this.parameters = parameters;
     }
 
     @Test
     public void test() {
         //J-
-        Optional<Long> shortestDistance = Algorithms.findShortestDistance(parameters.townGraph, parameters.from, parameters.to);
+        Optional<Long> shortestDistance = new P4FindShortestDistanceAlgorithm().algorithm(parameters.townGraph, parameters.from, parameters.to);
         MatcherAssert.assertThat("shortest distance", shortestDistance, Matchers.is(parameters.expectedShortestDistance));
         //J+
     }
