@@ -68,9 +68,6 @@ public class AlgorithmsCalculateDistanceForRouteTest {
     @Test
     public void test() {
         Optional<Integer> distance = Algorithms.calculateDistanceForRoute(townGraph, route);
-        MatcherAssert.assertThat("result is present", distance.isPresent(), Matchers.is(expectedDistance.isPresent()));
-        if (expectedDistance.isPresent()) {
-            MatcherAssert.assertThat("distance", distance.get(), Matchers.is(expectedDistance.get()));
-        }
+        MatcherAssert.assertThat("distance", distance, Matchers.is(expectedDistance));
     }
 }

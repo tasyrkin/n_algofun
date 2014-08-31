@@ -3,10 +3,12 @@ package test.logic;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.Set;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Sets;
 
 import test.domain.TownGraph;
 import test.domain.TownGraphEdge;
@@ -158,8 +160,62 @@ public class Algorithms {
         return result;
     }
 
-    public static Optional<Integer> findShortestPath(final TownGraph townGraph, final int from, final int to) {
-        return null;
+    public static Optional<Long> findShortestDistance(final TownGraph townGraph, final int from, final int to) {
+
+        long[] shortestDistance = new long[townGraph.getVertexes().size()];
+        for (int i = 0; i < shortestDistance.length; i++) {
+            shortestDistance[i] = Long.MAX_VALUE;
+        }
+
+        shortestDistance[from] = 0;
+
+        final Set<Integer> visitedVertexes = Sets.newHashSet(from);
+        final Set<Integer> remainingVertexes = Sets.newHashSet(townGraph.getVertexes());
+        remainingVertexes.remove(from);
+        while (!remainingVertexes.isEmpty()) {
+            Integer remainingVertexWithMinimalDistance = null;
+            long minimalDistance = Long.MAX_VALUE;
+            for (Integer remainingVertex : remainingVertexes) {
+                if (remainingVertexWithMinimalDistance == null) {
+                    remainingVertexWithMinimalDistance = remainingVertex;
+                }
+
+                List<TownGraphEdge> edges = townGraph.getFromEdges(remainingVertex);
+                for (TownGraphEdge edge : edges) {
+                    if (visitedVertexes.contains(edge.getFrom())) {
+                        long currentDistance = sumConsideringInf(shortestDistance[edge.getFrom()], edge.getDistance());
+                        if (shortestDistance[edge.getTo()] > currentDistance) {
+                            shortestDistance[edge.getTo()] = currentDistance;
+                        }
+
+                        if (shortestDistance[edge.getTo()] < minimalDistance) {
+                            remainingVertexWithMinimalDistance = edge.getTo();
+                            minimalDistance = shortestDistance[edge.getTo()];
+                        }
+                    }
+                }
+            }
+
+            visitedVertexes.add(remainingVertexWithMinimalDistance);
+            remainingVertexes.remove(remainingVertexWithMinimalDistance);
+        }
+
+        if (from == to) {
+            List<TownGraphEdge> edges = townGraph.getFromEdges(to);
+            shortestDistance[to] = Long.MAX_VALUE;
+            for (TownGraphEdge edge : edges) {
+                long currentDistance = sumConsideringInf(shortestDistance[edge.getFrom()], edge.getDistance());
+                if (shortestDistance[edge.getTo()] > currentDistance) {
+                    shortestDistance[edge.getTo()] = currentDistance;
+                }
+            }
+        }
+
+        return shortestDistance[to] == Long.MAX_VALUE ? Optional.<Long>absent() : Optional.of(shortestDistance[to]);
+    }
+
+    private static long sumConsideringInf(final long value, final int distance) {
+        return value == Long.MAX_VALUE ? Long.MAX_VALUE : value + distance;
     }
 
     private static class NodeInQueue {
