@@ -17,7 +17,7 @@ import test.logic.VertexMapper;
  * <p>The solution is linear traversal through the adjacency matrix and summing up the met values. In case if the
  * distance is 0, then the route does not exist.
  *
- * <p>The time complexity: O(E+K) where M - number of graph edges (for building adjacency matrix), K - number of
+ * <p>The time complexity: O(E+K) where E - number of graph edges (for building adjacency matrix), K - number of
  * vertexes in the route.
  *
  * <p>The space complexity: O(V^2) where V - number of graph vertexes.
