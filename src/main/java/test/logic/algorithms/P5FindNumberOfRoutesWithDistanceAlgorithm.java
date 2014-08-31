@@ -37,7 +37,7 @@ public class P5FindNumberOfRoutesWithDistanceAlgorithm implements AlgorithmExecu
     @Override
     public String validateParametersAndExecute(final TownGraph townGraph, final VertexMapper mapper,
             final String[] parameters) {
-        Preconditions.checkArgument(parameters != null && parameters.length == 3,
+        Preconditions.checkArgument(parameters != null && parameters.length == 4,
             "Expected input: P5 X Y N - problem 5: find the number of different routes from START vertex to FINISH vertex with a distance of less than MAX_DISTANCE."
                 + "X - START vertex, Y - FINISH vertex, N - short integer representing MAX_DISTANCE");
         Preconditions.checkArgument(INPUT_PROBLEM.valueOf(parameters[0]) == INPUT_PROBLEM.P5,
@@ -49,7 +49,7 @@ public class P5FindNumberOfRoutesWithDistanceAlgorithm implements AlgorithmExecu
 
         Optional<Integer> result = algorithm(townGraph, mapper.id(from), mapper.id(to), maxDistanceExclusive);
 
-        return result.isPresent() ? String.valueOf(result) : NO_ROUTE_FOUND;
+        return result.isPresent() ? String.valueOf(result.get()) : NO_ROUTE_FOUND;
     }
 
     private static class NodeInQueue {

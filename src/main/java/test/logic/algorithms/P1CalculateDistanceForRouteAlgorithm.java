@@ -44,7 +44,7 @@ public class P1CalculateDistanceForRouteAlgorithm implements AlgorithmExecutor {
 
         Optional<Integer> result = algorithm(townGraph, route);
 
-        return result.isPresent() ? String.valueOf(result) : NO_ROUTE_FOUND;
+        return result.isPresent() ? String.valueOf(result.get()) : NO_ROUTE_FOUND;
     }
 
     public Optional<Integer> algorithm(final TownGraph townGraph, final List<Integer> route) {

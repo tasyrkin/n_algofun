@@ -65,7 +65,7 @@ import java.util.List;
  * <p>OUTPUT #X: N
  * <p>where X - number of test case starting from 1, N - a number if answer exists, "NO SUCH ROUTE" otherwise
  */
-public class TextExecutor {
+public class TestExecutor {
         
     private static final String ANSWER_TEMPLATE = "OUTPUT #%s: %s"; 
     
@@ -83,7 +83,7 @@ public class TextExecutor {
         int currentQuery = 0;
         
         while(currentQuery++ < N){
-            String[] queryRequest = br.readLine().split("\\s");
+            String[] queryRequest = br.readLine().split("\\s+");
             
             Preconditions.checkArgument(queryRequest.length >= 1, "The problem query is missing");
 
